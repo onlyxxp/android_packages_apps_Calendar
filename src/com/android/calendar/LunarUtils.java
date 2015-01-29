@@ -89,9 +89,14 @@ public class LunarUtils {
      */
     public static String get(Context context, int year, int month, int day, int format,
             boolean showLunarBeforeFestival, ArrayList<String> result) {
+        final ArrayList<String> infoByYMD = ChineseCalendarGB.getInfoByYMD(year, month + 1, day);
+        if (result != null) {
+            result.addAll(infoByYMD);
+        }
+
         if (context == null || format < FORMAT_LUNAR_LONG) return null;
 
-        String res = null;
+        String res = infoByYMD.size() > 0 ? infoByYMD.get(0) : null;
 
         // Try to find the matched lunar info from the hash map.
         String key = getKey(year, month, day);

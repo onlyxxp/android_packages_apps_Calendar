@@ -173,6 +173,16 @@ public class MonthWeekEventsView extends SimpleWeekView {
     protected int mDaySeparatorInnerColor;
     protected int mTodayAnimateColor;
 
+    private int mColorDark = Color.parseColor("#999999");
+    private int mColorLight = Color.parseColor("#90AB76");
+    private int mColorHighLight = Color.parseColor("#E59C21");
+    protected int[] mInfoPaintColors = {
+            mColorDark,
+            mColorLight,
+            mColorLight,
+            mColorLight,
+            mWeekNumColor, mWeekNumColor };
+
     private boolean mAnimateToday;
     private int mAnimateTodayAlpha = 0;
     private ObjectAnimator mTodayAnimator = null;
@@ -745,6 +755,7 @@ public class MonthWeekEventsView extends SimpleWeekView {
                         }
                     }
                 }
+                System.out.println("xxx drawWeekNums " + year + " " + month + " " + monthDay);
 
                 ArrayList<String> infos = new ArrayList<String>();
                 LunarUtils.get(getContext(), year, month, monthDay,
@@ -757,8 +768,10 @@ public class MonthWeekEventsView extends SimpleWeekView {
                     int mOrientation = res.getConfiguration().orientation;
 
                     int num = 0;
+                    int oldColor = mMonthNumPaint.getColor();
                     for (int index = 0; index < infos.size(); index++) {
                         String info = infos.get(index);
+                        mMonthNumPaint.setColor(info.contains("月") ? mColorHighLight : mInfoPaintColors[index]);
                         if (TextUtils.isEmpty(info)) continue;
 
                         int infoX = 0;
@@ -773,6 +786,7 @@ public class MonthWeekEventsView extends SimpleWeekView {
                         canvas.drawText(info, infoX, infoY, mMonthNumPaint);
                         num = num + 1;
                     }
+                    mMonthNumPaint.setColor(oldColor);
 
                     // restore the text size.
                     mMonthNumPaint.setTextSize(originalTextSize);
